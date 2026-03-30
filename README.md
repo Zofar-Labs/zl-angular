@@ -1,18 +1,50 @@
+<p align="center">
+  <a href="https://angular.dev" target="_blank" class="hover:opacity-80 transition-opacity">
+      <img src="https://github.com/MiguelMateoTavarez/angular/raw/main/adev/src/assets/images/press-kit/angular_icon_gradient.gif" alt="angular-logo" width="120px" height="120px"/>
+  </a>
+  <a href="https://tailwindcss.com" target="_blank" class="hover:opacity-80 transition-opacity">
+      <img src="https://tailwindcss.com/_next/static/media/tailwindcss-mark.96ee6a5a.svg" alt="angular-logo" width="120px" height="120px"/>
+  </a>
+  <a href="https://daisyui.com" target="_blank" class="hover:opacity-80 transition-opacity">
+    <img src="https://img.daisyui.com/images/daisyui/mark-rotating.svg" alt="angular-logo" width="120px" height="120px"/>
+  </a>
+</p>
+
 # ZlAngular
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.2.
+This project is a personal Angular boilerplate designed for rapid project creation, pre-configured with a modern toolset for current and future projects.
 
-## Development server
+## Tech Stack & Core Tools
 
-To start a local development server, run:
+- **Framework:** [Angular 21](https://angular.dev/)
+- **Styling:** 
+  - [Tailwind CSS 4](https://tailwindcss.com/) - A utility-first CSS framework for rapid UI development.
+  - [daisyUI 5](https://daisyui.com/) - The most popular component library for Tailwind CSS.
+- **State Management & Data Fetching:** 
+  - [TanStack Query (Angular Query)](https://tanstack.com/query/latest/docs/framework/angular/overview) - Powerful asynchronous state management for Angular.
+- **Icons:** 
+  - [NG Icons](https://ng-icons.github.io/ng-icons/) - High-performance icon library, pre-configured with **Heroicons**.
+- **Notifications:** 
+  - [@ngxpert/hot-toast](https://ngxpert.github.io/hot-toast/) - Responsive and customizable toast notifications for Angular.
+- **Markdown Support:** 
+  - [ngx-markdown](https://github.com/j3n5e/ngx-markdown) & [marked](https://marked.js.org/) - Comprehensive markdown rendering support.
+- **Utilities:** 
+  - [date-fns](https://date-fns.org/) - Modern JavaScript date utility library.
+- **Testing:** 
+  - [Vitest](https://vitest.dev/) - A fast, modern Vite-native test runner.
 
-```bash
-ng serve
-```
+## Development
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+### Scripts
 
-## Code scaffolding
+To run these commands, you can use `pnpm`, `npm`, or `ng`.
+
+- `pnpm start`: Starts a local development server at `http://localhost:4200/`.
+- `pnpm build`: Compiles the project into the `dist/` directory for production.
+- `pnpm test`: Executes unit tests with Vitest.
+- `pnpm watch`: Builds the project in watch mode for development.
+
+### Code Scaffolding
 
 Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
 
@@ -20,40 +52,15 @@ Angular CLI includes powerful code scaffolding tools. To generate a new componen
 ng generate component component-name
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+For a complete list of available schematics (such as `directives`, `pipes`, or `services`), run:
 
 ```bash
 ng generate --help
 ```
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
 ## Additional Resources
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli)
+- [TanStack Query Angular Docs](https://tanstack.com/query/latest/docs/framework/angular/overview)
+- [daisyUI Component Documentation](https://daisyui.com/components/)
+- [Tailwind CSS v4 Documentation](https://tailwindcss.com/docs/v4-beta)
