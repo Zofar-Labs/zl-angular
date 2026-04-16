@@ -2,11 +2,18 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { provideIcons } from '@ng-icons/core';
 import { lucideChevronDown, lucideFilter, lucideRotateCcw, lucideSearch } from '@ng-icons/lucide';
 import { DragonballService } from '../services/dragonball-service';
-import { injectQuery } from '@tanstack/angular-query-experimental';
+import { injectQuery, keepPreviousData } from '@tanstack/angular-query-experimental';
 import { Pagination } from '../components/pagination';
 import { Table } from '../components/table';
 import { ColumnProperties } from '../interfaces/column-properties';
-import { SearchForm } from "../components/search-form";
+import { SearchForm } from '../components/search-form';
+
+interface SearchFormValues {
+  search: string;
+  gender: string;
+  race: string;
+  affiliation: string;
+}
 
 @Component({
   selector: 'app-table-page',
@@ -19,13 +26,15 @@ import { SearchForm } from "../components/search-form";
       lucideRotateCcw,
     }),
   ],
-  template: `
+  template: `  
     <div class="flex flex-col gap-6 p-6 bg-base-100 rounded-xl shadow-md w-full mx-auto">
       <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
         <h2 class="text-xl font-bold text-base-content">Dragon Ball Z Directory</h2>
-        <app-search-form/>
+        <app-search-form (filters)="searchEvent($event)" />
       </div>
+      
       <app-table [columns]="columns" [items]="characters()" />
+      
       <app-pagination
         [hasPrevious]="!links()?.previous"
         [hasNext]="!links()?.next"
@@ -41,34 +50,63 @@ export default class TablePage {
   private readonly dragonBallService = inject(DragonballService);
 
   protected readonly columns: ColumnProperties[] = [
-    {key: 'name', label: 'Name'},
-    {key: 'ki', label: 'Ki'},
-    {key: 'maxKi', label: 'Max Ki'},
-    {key: 'race', label: 'Race'},
-    {key: 'gender', label: 'Gender'},
-    {key: 'affiliation', label: 'Affiliation'},
-    {key: 'deletedAt', label: 'Deleted at'},
+    { key: 'name', label: 'Name' },
+    { key: 'ki', label: 'Ki' },
+    { key: 'maxKi', label: 'Max Ki' },
+    { key: 'race', label: 'Race' },
+    { key: 'gender', label: 'Gender' },
+    { key: 'affiliation', label: 'Affiliation' },
   ];
 
-  private page = signal<number>(1);
-  private limit = signal<number>(10);
+  protected page = signal<number>(1);
+  protected limit = signal<number>(10);
+  protected search = signal<string>('');
+  protected gender = signal<string>('');
+  protected race = signal<string>('');
+  protected affiliation = signal<string>('');
 
   query = injectQuery(() => ({
-    queryKey: ['characters'],
-    queryFn: () => this.dragonBallService.getCharacters(this.page(), this.limit()),
+    queryKey: [
+      'characters',
+      {
+        page: this.page(),
+        limit: this.limit(),
+        search: this.search(),
+        gender: this.gender(),
+        race: this.race(),
+        affiliation: this.affiliation(),
+      },
+    ],
+    queryFn: ({ queryKey }) => {
+      const [_key, filters] = queryKey as [string, any];
+      return this.dragonBallService.getCharacters(filters);
+    },
+    placeholderData: keepPreviousData,
   }));
 
-  protected readonly characters = computed(() => this.query.data()?.items);
+  protected readonly characters = computed(() => this.query.data()?.items ?? []);
   protected readonly meta = computed(() => this.query.data()?.meta);
   protected readonly links = computed(() => this.query.data()?.links);
 
   nextPage(): void {
-    this.page.update((value) => (!!this.links()?.next ? ++value : value));
-    this.query.refetch();
+    const next = this.links()?.next;
+    if (next) {
+      this.page.update((v) => v + 1);
+    }
   }
 
   previousPage(): void {
-    this.page.update((value) => (!!this.links()?.previous ? --value : value));
-    this.query.refetch();
+    const prev = this.links()?.previous;
+    if (prev) {
+      this.page.update((v) => v - 1);
+    }
+  }
+
+  searchEvent(values: SearchFormValues) {
+    this.search.set(values.search || '');
+    this.gender.set(values.gender || '');
+    this.race.set(values.race || '');
+    this.affiliation.set(values.affiliation || '');
+    this.page.set(1);
   }
 }
