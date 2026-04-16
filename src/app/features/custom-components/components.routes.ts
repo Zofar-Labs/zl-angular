@@ -7,7 +7,7 @@ const componentRoutes: Routes = [
     loadChildren: () => [
       {
         path: 'table',
-        loadComponent: () => import('./pages/table'),
+        loadComponent: () => import('./pages/table-page'),
       },
       {
         path: '',
