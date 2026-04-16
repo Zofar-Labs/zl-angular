@@ -1,18 +1,14 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import {
-  lucideChevronDown,
-  lucideFilter,
-  lucideRotateCcw,
-  lucideSearch,
-} from '@ng-icons/lucide';
+import { lucideChevronDown, lucideFilter, lucideRotateCcw, lucideSearch } from '@ng-icons/lucide';
 import { DragonballService } from '../services/dragonball-service';
 import { injectQuery } from '@tanstack/angular-query-experimental';
 import { JsonPipe } from '@angular/common';
+import { Pagination } from '../components/pagination';
 
 @Component({
   selector: 'app-table',
-  imports: [NgIcon, JsonPipe],
+  imports: [NgIcon, JsonPipe, Pagination],
   viewProviders: [
     provideIcons({
       lucideFilter,
@@ -74,12 +70,12 @@ import { JsonPipe } from '@angular/common';
                   >
                   <div class="flex flex-wrap gap-2">
                     @for (status of ['Draft', 'Published', 'Archived']; track status) {
-                    <label
-                      class="flex items-center gap-2 px-4 py-2 rounded-full border border-base-300 bg-base-100 hover:border-primary/50 cursor-pointer transition-all has-[:checked]:bg-primary/5 has-[:checked]:border-primary has-[:checked]:text-primary has-[:checked]:ring-1 has-[:checked]:ring-primary/20"
-                    >
-                      <input type="checkbox" class="hidden" [checked]="status === 'Published'" />
-                      <span class="text-xs font-semibold">{{ status }}</span>
-                    </label>
+                      <label
+                        class="flex items-center gap-2 px-4 py-2 rounded-full border border-base-300 bg-base-100 hover:border-primary/50 cursor-pointer transition-all has-[:checked]:bg-primary/5 has-[:checked]:border-primary has-[:checked]:text-primary has-[:checked]:ring-1 has-[:checked]:ring-primary/20"
+                      >
+                        <input type="checkbox" class="hidden" [checked]="status === 'Published'" />
+                        <span class="text-xs font-semibold">{{ status }}</span>
+                      </label>
                     }
                   </div>
                 </section>
@@ -92,15 +88,15 @@ import { JsonPipe } from '@angular/common';
                   >
                   <div class="grid grid-cols-2 gap-1">
                     @for (
-                    dept of ['Engineering', 'Marketing', 'Human Resources', 'Sales'];
-                    track dept
+                      dept of ['Engineering', 'Marketing', 'Human Resources', 'Sales'];
+                      track dept
                     ) {
-                    <label
-                      class="label cursor-pointer justify-start gap-3 px-3 py-2 rounded-lg hover:bg-base-200/50 transition-colors"
-                    >
-                      <input type="checkbox" class="checkbox checkbox-xs checkbox-primary" />
-                      <span class="label-text text-sm font-medium">{{ dept }}</span>
-                    </label>
+                      <label
+                        class="label cursor-pointer justify-start gap-3 px-3 py-2 rounded-lg hover:bg-base-200/50 transition-colors"
+                      >
+                        <input type="checkbox" class="checkbox checkbox-xs checkbox-primary" />
+                        <span class="label-text text-sm font-medium">{{ dept }}</span>
+                      </label>
                     }
                   </div>
                 </section>
@@ -164,13 +160,13 @@ import { JsonPipe } from '@angular/common';
         </table>
       </div>
       <!-- Pagination Component -->
-      <div class="flex justify-end w-full mt-2">
-        <div class="join">
-          <button (click)="previousPage()" [disabled]="!links()?.previous" class="join-item btn">«</button>
-          <button class="join-item btn">Page: {{ meta()?.currentPage }}</button>
-          <button (click)="nextPage()" [disabled]="!links()?.next" class="join-item btn">»</button>
-        </div>
-      </div>
+      <app-pagination
+        [hasPrevious]="!links()?.previous"
+        [hasNext]="!links()?.next"
+        [currentPage]="meta()?.currentPage"
+        (previousPage)="previousPage()"
+        (nextPage)="nextPage()"
+      />
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -185,7 +181,7 @@ export default class Table {
     'Race',
     'Gender',
     'Affiliation',
-    'Deleted at'
+    'Deleted at',
   ];
 
   private page = signal<number>(1);
@@ -198,15 +194,15 @@ export default class Table {
 
   protected readonly characters = computed(() => this.query.data()?.items);
   protected readonly meta = computed(() => this.query.data()?.meta);
-  protected readonly links = computed(() =>this.query.data()?.links);
+  protected readonly links = computed(() => this.query.data()?.links);
 
   nextPage(): void {
-    this.page.update((value) => !!this.links()?.next ? ++value : value);
+    this.page.update((value) => (!!this.links()?.next ? ++value : value));
     this.query.refetch();
   }
 
   previousPage(): void {
-    this.page.update((value) => !!this.links()?.previous ? --value : value);
+    this.page.update((value) => (!!this.links()?.previous ? --value : value));
     this.query.refetch();
   }
 }
