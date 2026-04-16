@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   lucideChevronDown,
@@ -6,10 +6,13 @@ import {
   lucideRotateCcw,
   lucideSearch,
 } from '@ng-icons/lucide';
+import { DragonballService } from '../services/dragonball-service';
+import { injectQuery } from '@tanstack/angular-query-experimental';
+import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-table',
-  imports: [NgIcon],
+  imports: [NgIcon, JsonPipe],
   viewProviders: [
     provideIcons({
       lucideFilter,
@@ -21,8 +24,8 @@ import {
   template: `
     <div class="flex flex-col gap-6 p-6 bg-base-100 rounded-xl shadow-md w-full mx-auto">
       <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
-        <h2 class="text-xl font-bold text-base-content">Employee Directory</h2>
-
+        <h2 class="text-xl font-bold text-base-content">Dragon Ball Z Directory</h2>
+        <!-- Search Component -->
         <div class="join">
           <div>
             <label class="input validator join-item">
@@ -135,49 +138,75 @@ import {
           </div>
         </div>
       </div>
-
+      <!-- Table Component -->
       <div class="overflow-x-auto border border-base-200 rounded-box">
         <table class="table">
           <thead class="bg-base-200/50">
             <tr>
-              <th></th>
-              <th>Name</th>
-              <th>Job</th>
-              <th>Favorite Color</th>
+              @for (column of columns; track $index) {
+                <th>{{ column }}</th>
+              }
             </tr>
           </thead>
           <tbody>
-            <tr class="hover">
-              <th>1</th>
-              <td>Cy Ganderton</td>
-              <td>Quality Control Specialist</td>
-              <td>Blue</td>
-            </tr>
-            <tr class="hover">
-              <th>2</th>
-              <td>Hart Hagerty</td>
-              <td>Desktop Support Technician</td>
-              <td>Purple</td>
-            </tr>
-            <tr class="hover">
-              <th>3</th>
-              <td>Brice Swyre</td>
-              <td>Tax Accountant</td>
-              <td>Red</td>
-            </tr>
+            @for (character of characters(); track character.id) {
+              <tr class="hover">
+                <td>{{ character.name }}</td>
+                <td>{{ character.ki }}</td>
+                <td>{{ character.maxKi }}</td>
+                <td>{{ character.race }}</td>
+                <td>{{ character.gender }}</td>
+                <td>{{ character.affiliation }}</td>
+                <td>{{ character.deletedAt }}</td>
+              </tr>
+            }
           </tbody>
         </table>
       </div>
-
+      <!-- Pagination Component -->
       <div class="flex justify-end w-full mt-2">
         <div class="join">
-          <button class="join-item btn">«</button>
-          <button class="join-item btn">Page 22</button>
-          <button class="join-item btn">»</button>
+          <button (click)="previousPage()" [disabled]="!links()?.previous" class="join-item btn">«</button>
+          <button class="join-item btn">Page: {{ meta()?.currentPage }}</button>
+          <button (click)="nextPage()" [disabled]="!links()?.next" class="join-item btn">»</button>
         </div>
       </div>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export default class Table {}
+export default class Table {
+  private readonly dragonBallService = inject(DragonballService);
+
+  protected readonly columns: string[] = [
+    'Name',
+    'Ki',
+    'Max Ki',
+    'Race',
+    'Gender',
+    'Affiliation',
+    'Deleted at'
+  ];
+
+  private page = signal<number>(1);
+  private limit = signal<number>(10);
+
+  query = injectQuery(() => ({
+    queryKey: ['characters'],
+    queryFn: () => this.dragonBallService.getCharacters(this.page(), this.limit()),
+  }));
+
+  protected readonly characters = computed(() => this.query.data()?.items);
+  protected readonly meta = computed(() => this.query.data()?.meta);
+  protected readonly links = computed(() =>this.query.data()?.links);
+
+  nextPage(): void {
+    this.page.update((value) => !!this.links()?.next ? ++value : value);
+    this.query.refetch();
+  }
+
+  previousPage(): void {
+    this.page.update((value) => !!this.links()?.previous ? --value : value);
+    this.query.refetch();
+  }
+}
