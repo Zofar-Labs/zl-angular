@@ -10,6 +10,10 @@ const componentRoutes: Routes = [
         loadComponent: () => import('./pages/table-page'),
       },
       {
+        path: 'calendar',
+        loadComponent: () => import('./pages/calendar-page'),
+      },
+      {
         path: '',
         loadComponent: () => import('./pages/main-page'),
       },

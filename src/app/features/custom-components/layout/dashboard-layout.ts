@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideHome, lucideSidebarOpen, lucideTable } from '@ng-icons/lucide';
+import { lucideCalendar, lucideHome, lucideSidebarOpen, lucideTable } from '@ng-icons/lucide';
 
 interface MenuItem {
   path: string;
@@ -12,20 +12,20 @@ interface MenuItem {
 @Component({
   selector: 'app-dashboard-layout',
   imports: [RouterOutlet, NgIcon, RouterLink, RouterLinkActive],
-  viewProviders: [provideIcons({ lucideHome, lucideTable, lucideSidebarOpen })],
+  viewProviders: [provideIcons({ lucideHome, lucideTable, lucideSidebarOpen, lucideCalendar })],
   template: `
-    <div class="drawer lg:drawer-open">
+    <div class="drawer lg:drawer-open h-svh">
       <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
-      <div class="drawer-content flex flex-col h-full">
+      <div class="drawer-content flex flex-col h-full overflow-hidden">
         <!-- Navbar -->
-        <nav class="navbar w-full bg-base-300">
+        <nav class="navbar w-full bg-base-300 shrink-0">
           <label for="my-drawer-4" aria-label="open sidebar" class="btn btn-square btn-ghost">
             <!-- Sidebar toggle icon -->
-          <ng-icon name="lucideSidebarOpen" />
+            <ng-icon name="lucideSidebarOpen" />
           </label>
           <div class="px-4">Navbar Title</div>
         </nav>
-        <main class="h-full p-4">
+        <main class="flex-1 min-h-0 p-4">
           <router-outlet />
         </main>
       </div>
@@ -43,7 +43,7 @@ interface MenuItem {
                 <a
                   [routerLink]="menuItem.path"
                   routerLinkActive="bg-primary"
-                  [routerLinkActiveOptions]="{exact: true}"
+                  [routerLinkActiveOptions]="{ exact: true }"
                   class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                   [attr.data-tip]="menuItem.label"
                 >
@@ -71,6 +71,11 @@ export default class DashboardLayout {
       path: '/components/table',
       icon: 'lucideTable',
       label: 'Table',
+    },
+    {
+      path: '/components/calendar',
+      icon: 'lucideCalendar',
+      label: 'Calendar',
     },
   ];
 }
