@@ -3,7 +3,7 @@
       <img src="https://github.com/MiguelMateoTavarez/angular/raw/main/adev/src/assets/images/press-kit/angular_icon_gradient.gif" alt="angular-logo" width="120px" height="120px"/>
   </a>
   <a href="https://tailwindcss.com" target="_blank" class="hover:opacity-80 transition-opacity">
-      <img src="https://tailwindcss.com/_next/static/media/tailwindcss-mark.96ee6a5a.svg" alt="angular-logo" width="120px" height="120px"/>
+      <img src="https://tailwindcss.com/_next/static/media/tailwindcss-mark.0~s.iziag2xd..svg" alt="angular-logo" width="120px" height="120px"/>
   </a>
   <a href="https://daisyui.com" target="_blank" class="hover:opacity-80 transition-opacity">
     <img src="https://img.daisyui.com/images/daisyui/mark-rotating.svg" alt="angular-logo" width="120px" height="120px"/>
