@@ -50,8 +50,8 @@ import { RouterLink } from '@angular/router';
                   class="badge badge-secondary badge-outline py-4 px-6 gap-2 text-md font-semibold text-[#38BDF8]"
                 >
                   <img
-                    src="https://tailwindcss.com/_next/static/media/tailwindcss-mark.96ee6a5a.svg"
-                    alt="angular-logo"
+                    src="https://tailwindcss.com/_next/static/media/tailwindcss-mark.0~s.iziag2xd..svg"
+                    alt="tailwindcss-logo"
                     width="20px"
                     height="20px"
                   />
@@ -60,7 +60,7 @@ import { RouterLink } from '@angular/router';
                 <div class="badge badge-accent badge-outline py-4 px-6 gap-2 text-md font-semibold">
                   <img
                     src="https://img.daisyui.com/images/daisyui/mark-rotating.svg"
-                    alt="angular-logo"
+                    alt="daisyui-logo"
                     width="20px"
                     height="20px"
                   />
@@ -102,8 +102,8 @@ import { RouterLink } from '@angular/router';
               class="hover:opacity-80 transition-opacity"
             >
               <img
-                src="https://tailwindcss.com/_next/static/media/tailwindcss-mark.96ee6a5a.svg"
-                alt="angular-logo"
+                src="https://tailwindcss.com/_next/static/media/tailwindcss-mark.0~s.iziag2xd..svg"
+                alt="tailwindcss-logo"
                 width="120px"
                 height="120px"
               />
@@ -115,7 +115,7 @@ import { RouterLink } from '@angular/router';
             >
               <img
                 src="https://img.daisyui.com/images/daisyui/mark-rotating.svg"
-                alt="angular-logo"
+                alt="daisyui-logo"
                 width="120px"
                 height="120px"
               />
